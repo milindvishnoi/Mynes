@@ -34,7 +34,24 @@ class MynesBoard:
         self.board = [[
             MyneSquare(0, False, "temp_empty.png", pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
             for y in range(self.height)] for x in range(self.width)]
-        # Place mines randomly on the squares
+        self.place_mines()
+
+    def is_valid_coordinate(self, row, col) -> bool:
+        """
+        Checks if the coordinate is valid
+
+        :return: if the coordinate is valid or not
+        """
+        if 0 <= row < MynesBoard.width and 0 <= col < MynesBoard.height:
+            return True
+        return False
+
+    def place_mines(self) -> None:
+        """
+        It places the mines in the MynesBoard Randomly.
+
+        :return: None
+        """
         i = 0
         while i < self.mine_count:
             mine_x, mine_y = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
@@ -43,4 +60,3 @@ class MynesBoard:
                 self.board[mine_y][mine_x].value = -1
                 self.board[mine_y][mine_x].icon = pygame.image.load("temp_mine.png")
                 i += 1
-
