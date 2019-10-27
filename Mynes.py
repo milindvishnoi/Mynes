@@ -148,7 +148,6 @@ class Mynes:
         """
         Clean up and close the game.
         """
-
         pygame.quit()
 
     def render(self) -> None:
@@ -175,9 +174,7 @@ class Mynes:
         print("running")
         self.screen.fill(WHITE)
         while self._running:
-
             for event in pygame.event.get():
                 self.on_event(event)
                 self.render()
-
         self.quit()
