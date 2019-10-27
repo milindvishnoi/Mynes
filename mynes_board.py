@@ -7,17 +7,17 @@ import pygame
 
 ICON_SIZE = 24
 
-class MynesBoard:
+class mynes_board:
     """
     === Public Attributes ===
     board:  Matrix representation of the board state, to be used by Mynes
 
     """
 
-    # === Private Attributes ===
-    # _width: board width (right)
-    # _height: board height (down)
-    # _mine_count: number of mines placed on the board
+    # === Public Attributes ===
+    # width: board width (right)
+    # height: board height (down)
+    # mine_count: number of mines placed on the board
     board: List[List]
 
     def __init__(self):
@@ -43,4 +43,9 @@ class MynesBoard:
                 self.board[mine_y][mine_x].value = -1
                 self.board[mine_y][mine_x].icon = pygame.image.load("temp_mine.png")
                 i += 1
+    
 
+
+if __name__ == "__main__":
+    mynes = mynes_board()
+    print(mynes)
