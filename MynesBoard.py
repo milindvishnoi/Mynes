@@ -27,8 +27,8 @@ class MynesBoard:
 
         """
         # Board size in playable spaces
-        self.width = 8
-        self.height = 8
+        self.width = 10
+        self.height = 10
         self.mine_count = 10
         # Construct board of empty squares
         self.board = [[
