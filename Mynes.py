@@ -5,9 +5,15 @@ from MynesBoard import *
 # from MyneGUI import *
 import pygame
 
+<<<<<<< HEAD
 WHITE = (255, 0, 0)
 BLACK = (255, 255, 255)
 ICON_SIZE = 24
+=======
+WHITE = (0, 0, 0)
+BLACK = (0, 0, 0)
+ICON_SIZE = 25
+>>>>>>> minhyeok1295
 
 
 class Mynes:
@@ -128,6 +134,9 @@ class Mynes:
                                 self.mynes_lost()
                             # else:
                             # self.board.clear_spaces
+                            if square.value != -1:
+                                square.icon = pygame.image.load(str(square.value) + ".png")
+                                # self.mynes_lost()
                         # Right click for Flagging
                         elif event.button == 3:
                             # Remove Flag

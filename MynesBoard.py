@@ -27,8 +27,9 @@ class MynesBoard:
 
         """
         # Board size in playable spaces
-        self.width = 8
-        self.height = 8
+
+        self.width = 10
+        self.height = 10
         self.mine_count = 10
         # Construct board of empty squares
         self.board = [[
@@ -41,6 +42,6 @@ class MynesBoard:
             # Prevent duplicate mines
             if self.board[mine_y][mine_x].value != -1:
                 self.board[mine_y][mine_x].value = -1
-                self.board[mine_y][mine_x].icon = pygame.image.load("temp_mine.png")
+                self.board[mine_y][mine_x].icon = pygame.image.load("temp_empty.png")
                 i += 1
 
