@@ -17,3 +17,20 @@ class MyneSquare:
         self.flag = flag
         self.icon = pygame.image.load(icon)
         self.hitbox = hitbox
+
+    def get_value(self) -> int:
+        """Returns the integer representation of the square
+
+        >>> new_square = MyneSquare(0, False, "temp_empty.png", 
+                            pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
+                            for y in range(self.height)] for x in range(self.width)]
+        >>> myne_quare.get_value()
+        -1
+        """
+        return self.value
+    
+
+    def set_value(self, value:int) -> None:
+        """Changes the value of the square to the paramater that is given.
+        """
+        self.value = value

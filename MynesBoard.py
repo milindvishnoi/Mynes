@@ -7,6 +7,7 @@ import pygame
 
 ICON_SIZE = 24
 
+
 class MynesBoard:
     """
     === Public Attributes ===
@@ -14,10 +15,10 @@ class MynesBoard:
 
     """
 
-    # === Private Attributes ===
-    # _width: board width (right)
-    # _height: board height (down)
-    # _mine_count: number of mines placed on the board
+    # === Public Attributes ===
+    # width: board width (right)
+    # height: board height (down)
+    # mine_count: number of mines placed on the board
     board: List[List]
 
     def __init__(self):
@@ -38,10 +39,128 @@ class MynesBoard:
         # Place mines randomly on the squares
         i = 0
         while i < self.mine_count:
+
             mine_x, mine_y = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
+            # print(type(self.board[mine_y][mine_x]), self.board[mine_y][mine_x].get_value())
             # Prevent duplicate mines
-            if self.board[mine_y][mine_x].value != -1:
-                self.board[mine_y][mine_x].value = -1
-                self.board[mine_y][mine_x].icon = pygame.image.load("temp_empty.png")
+            curr_square = self.board[mine_y][mine_x]
+            if curr_square.get_value() != -1:
+                curr_square.set_value(-1)
+                curr_square.icon = pygame.image.load("temp_mine.png")
                 i += 1
 
+        # Find number of adjacent mines for each non-myne square
+        self.get_myne_values()
+
+        for row in range(self.width):
+            for col in range(self.height):
+                curr_square = self.board[row][col]
+                value = curr_square.get_value()
+                print("value is ", value)
+                if value != -1 and value != 0:
+                    curr_square.icon = pygame.image.load(str(value) + ".png")
+
+    def _get_adjacent_mynes(self, row: int, col: int) -> int:
+        """Returns the number of mynes that are adjacent to a specific square coordinate
+        on the board
+        """
+
+        # Considering the vertical edges of the board
+        if row == 0:
+            # Only consider curr row and row below
+            rows_to_check = [1, 0]
+        elif row == self.height - 1:
+            # Only consider curr row and row above
+            rows_to_check = [-1, 0]
+        else:
+            # Consider curr row, row above, and row below
+            rows_to_check = [1, 0, -1]
+        
+        # Considering the horizontal edges of the board
+        if col == 0:
+            # Only consider curr col and col to the right
+            cols_to_check = [1, 0]
+        elif col == self.width - 1:
+            # Only consider curr col and col to the left
+            cols_to_check = [-1, 0]
+        else:
+            # Consider curr col, col to the left, and col to the right
+            cols_to_check = [1, -1, 0]
+
+        adjacent_mynes = 0      # Counter for number of adjacent mynes
+        
+        # Going through all adjacent rows
+        for row_direction in rows_to_check:
+            for col_direction in cols_to_check:
+                # The exact coordinate to check
+                x_coordinate = row + row_direction
+                y_coorindate = col + col_direction
+
+                # Getting value of square
+                square = self.board[x_coordinate][y_coorindate]
+                square_value = square.get_value()
+
+                # Adding to myne counter if necessary
+                if square_value == -1:
+                    adjacent_mynes += 1
+        
+        return adjacent_mynes
+
+    def get_myne_values(self) -> None:
+        """Using the private helper method _get_adjacent_mynes(self, row: int, col: int)
+        to update the value of non-myne squares as necessary
+        """
+
+        # Going through each coordinate of board
+        for row in range(self.height):
+            for col in range(self.width):
+                # Getting value of square
+                square = self.board[row][col]
+                square_value = square.get_value()
+
+                # Updating square value as necessary
+                if square_value != -1:
+                    adj_mynes = self._get_adjacent_mynes(row, col)
+                    square.set_value(adj_mynes)
+
+    def __str__(self) -> str:
+        """String representation of <MynesBoard>, for user to view in console.
+
+        Reminder that -1 represents a myne, 0 represents an empty space, and any other
+        number represents the number of adjacment mines htat are present.
+
+        >>> MynesBoard = MynesBoard()
+        >>> print(MynesBoard)
+        [ 0 ][ 1 ][ 1 ][ 1 ][ 0 ][ 1 ][ 3 ][ -1]
+        [ 0 ][ 1 ][ -1][ 1 ][ 0 ][ 1 ][ -1][ -1]
+        [ 1 ][ 3 ][ 2 ][ 1 ][ 0 ][ 1 ][ 2 ][ 2 ]
+        [ -1][ 2 ][ -1][ 1 ][ 0 ][ 0 ][ 0 ][ 0 ]
+        [ 1 ][ 2 ][ 1 ][ 1 ][ 1 ][ 1 ][ 1 ][ 0 ]
+        [ 0 ][ 0 ][ 0 ][ 0 ][ 1 ][ -1][ 1 ][ 0 ]
+        [ 1 ][ 1 ][ 0 ][ 0 ][ 1 ][ 1 ][ 1 ][ 0 ]
+        [ -1][ 1 ][ 0 ][ 0 ][ 0 ][ 0 ][ 0 ][ 0 ]
+        """
+        board = ''      # String that will represent the board
+
+        # Going through the nested list representation of the Mynes board
+        for row in self.board:
+            for square in row:
+
+                # Getting integer value of square
+                square_value = square.get_value()
+
+                # Adding to <board> as necessary
+                if square_value == -1:
+                    board += "[ -1]"
+                else:
+                    board += "[ " + str(square_value) + " ]"
+            
+            # Start new line for every row
+            board += '\n'       
+        
+        return board
+                
+
+if __name__ == "__main__":
+    mynes = MynesBoard()
+    print(mynes)
