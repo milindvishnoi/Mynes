@@ -5,15 +5,10 @@ from MynesBoard import *
 # from MyneGUI import *
 import pygame
 
-<<<<<<< HEAD
-WHITE = (255, 0, 0)
-BLACK = (255, 255, 255)
-ICON_SIZE = 24
-=======
 WHITE = (0, 0, 0)
 BLACK = (0, 0, 0)
 ICON_SIZE = 25
->>>>>>> minhyeok1295
+
 
 
 class Mynes:
