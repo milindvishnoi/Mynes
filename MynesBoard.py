@@ -1,13 +1,14 @@
 # Board Constructor and manipulator for Mynes
 
 from typing import List
-from MyneSquare import myne_square
+from MyneSquare import MyneSquare
 import random
 import pygame
 
 ICON_SIZE = 24
 
-class mynes_board:
+
+class MynesBoard:
     """
     === Public Attributes ===
     board:  Matrix representation of the board state, to be used by Mynes
@@ -32,29 +33,36 @@ class mynes_board:
         self.mine_count = 10
         # Construct board of empty squares
         self.board = [[
-            myne_square(0, False, "temp_empty.png", pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
+            MyneSquare(0, False, "temp_empty.png", pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
             for y in range(self.height)] for x in range(self.width)]
         # Place mines randomly on the squares
         i = 0
         while i < self.mine_count:
+
             mine_x, mine_y = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
+            # print(type(self.board[mine_y][mine_x]), self.board[mine_y][mine_x].get_value())
             # Prevent duplicate mines
-            if self.board[mine_y][mine_x].value != -1:
-                self.board[mine_y][mine_x].value = -1
-                self.board[mine_y][mine_x].icon = pygame.image.load("temp_mine.png")
+            curr_square = self.board[mine_y][mine_x]
+            if curr_square.get_value() != -1:
+                curr_square.set_value(-1)
+                curr_square.icon = pygame.image.load("temp_mine.png")
                 i += 1
-        
-        #Find number of adjacent mines for each non-myne square
+
+        # Find number of adjacent mines for each non-myne square
         self.get_myne_values()
-    
+
+        for row in range(self.width):
+            for col in range(self.height):
+                curr_square = self.board[row][col]
+                value = curr_square.get_value()
+                print("value is ", value)
+                if value != -1 and value != 0:
+                    curr_square.icon = pygame.image.load(str(value) + ".png")
+
     def _get_adjacent_mynes(self, row: int, col: int) -> int:
         """Returns the number of mynes that are adjacent to a specific square coordinate
         on the board
         """
-
-        # A list of column and row directions that should be checked for potential mynes
-        rows_to_check = []
-        cols_to_check = []
 
         # Considering the vertical edges of the board
         if row == 0:
@@ -96,7 +104,6 @@ class mynes_board:
                     adjacent_mynes += 1
         
         return adjacent_mynes
-        
 
     def get_myne_values(self) -> None:
         """Using the private helper method _get_adjacent_mynes(self, row: int, col: int)
@@ -115,15 +122,14 @@ class mynes_board:
                     adj_mynes = self._get_adjacent_mynes(row, col)
                     square.set_value(adj_mynes)
 
-
     def __str__(self) -> str:
         """String representation of <MynesBoard>, for user to view in console.
 
         Reminder that -1 represents a myne, 0 represents an empty space, and any other
         number represents the number of adjacment mines htat are present.
 
-        >>> mynes_board = mynes_board()
-        >>> print(mynes_board)
+        >>> MynesBoard = MynesBoard()
+        >>> print(MynesBoard)
         [ 0 ][ 1 ][ 1 ][ 1 ][ 0 ][ 1 ][ 3 ][ -1]
         [ 0 ][ 1 ][ -1][ 1 ][ 0 ][ 1 ][ -1][ -1]
         [ 1 ][ 3 ][ 2 ][ 1 ][ 0 ][ 1 ][ 2 ][ 2 ]
@@ -155,5 +161,5 @@ class mynes_board:
                 
 
 if __name__ == "__main__":
-    mynes = mynes_board()
+    mynes = MynesBoard()
     print(mynes)

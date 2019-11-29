@@ -1,7 +1,7 @@
 # Main file for Mynes Game project
 # Controls the game state based on player inputs and updates MynesBoard
 
-from mynes_board import *
+from MynesBoard import *
 # from MyneGUI import *
 import pygame
 
@@ -25,7 +25,7 @@ class Mynes:
     # _running: pygame attribute that runs or stops the game
     # _flags_placed: Keeps track of how many flag objects are on the board
 
-    game_board: mynesBoard
+    game_board: MynesBoard
     # GUI: MynesGUI
     flag_count: int
     _running: bool
@@ -37,7 +37,7 @@ class Mynes:
         """
         self._running = False
         self._lost = False
-        self.game_board = mynesBoard()
+        self.game_board = MynesBoard()
         # self.GUI = MynesGUI()
         self.screen = None
         self.flag_count = self.game_board.mine_count

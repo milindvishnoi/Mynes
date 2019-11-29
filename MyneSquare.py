@@ -1,7 +1,7 @@
 import pygame
 
 
-class myne_square:
+class MyneSquare:
     """
     An object that acts as a playable space on the board.
     """
@@ -21,7 +21,7 @@ class myne_square:
     def get_value(self) -> int:
         """Returns the integer representation of the square
 
-        >>> new_square = myne_square(0, False, "temp_empty.png", 
+        >>> new_square = MyneSquare(0, False, "temp_empty.png", 
                             pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
                             for y in range(self.height)] for x in range(self.width)]
         >>> myne_quare.get_value()
