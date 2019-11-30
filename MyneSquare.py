@@ -17,3 +17,20 @@ class MyneSquare:
         self.flag = flag
         self.icon = pygame.image.load(icon)
         self.hitbox = hitbox
+        self.opened = False
+
+    def open(self):
+        if self.value == -1 and self.opened == False :
+            self.opened = True
+            self.icon = pygame.image.load("mine.png")
+        elif self.value != -1 and self.opened == False:
+            self.opened = True
+            self.icon = pygame.image.load(str(self.value) + ".png")
+
+    def flagging(self):
+        if self.flag == False and self.opened == False:
+            self.flag == True
+            self.icon = pygame.image.load("temp_flag.png")
+        elif self.flag == True and self.opened == False:
+            self.flag == False
+            self.icon = pygame.image.load("temp_empty.png")

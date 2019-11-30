@@ -120,30 +120,28 @@ class Mynes:
             for board_y in range(self.game_board.height):
                 for board_x in range(self.game_board.width):
                     square = self.game_board.board[board_x][board_y]
+                    square.open()
                     # Square that mouse is over
-                    if square.hitbox.collidepoint(x, y):
+                    """if square.hitbox.collidepoint(x, y):
                         # 1 for left click, 3 for right click
                         if event.button == 1:
-                            if square.value != -1:
-                                square.icon = pygame.image.load(str(square.value) + ".png")
+                            square.open()
                             if square.value == -1:
-                                square.icon = pygame.image.load("temp_mine.png")
-                                # self.mynes_lost()
+                                self.mynes_lost()
                         # Right click for Flagging
                         elif event.button == 3:
-                            # Remove Flag
-                            if square.flag:
-                                square.flag = False
-                                self.flag_count += 1
-                                square.icon = pygame.image.load("temp_empty.png")
-                            # Don't Place Flag
-                            elif (not square.flag) and self.flag_count == 0:
+                            # Don't place Flag
+                            if self.flag_count == 0:
                                 pass
-                            # Place Flag
                             else:
-                                square.flag = True
-                                self.flag_count -= 1
-                                square.icon = pygame.image.load("temp_flag.png")
+                                square.flagging()
+                                # placed flag
+                                if square.flag:
+                                    self.flag_count -= 1
+                                # removed flag
+                                else:
+                                    self.flag_count += 1"""
+                                    
 
     def quit(self) -> None:
         """

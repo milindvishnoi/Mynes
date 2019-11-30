@@ -41,6 +41,14 @@ class MynesBoard:
             # Prevent duplicate mines
             if self.board[mine_y][mine_x].value != -1:
                 self.board[mine_y][mine_x].value = -1
-                self.board[mine_y][mine_x].icon = pygame.image.load("temp_empty.png")
                 i += 1
-
+            
+        # detects mine and updates the surrounding squares
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.board[x][y].value == -1:
+                    surroundings = [[x-1,y-1],[x-1,y],[x-1,y+1],[x,y-1],[x,y+1],[x+1,y-1],[x+1,y],[x+1,y+1]]
+                    for pos in surroundings:
+                        if pos[0] in range(self.width) and pos[1] in range(self.height):
+                            if self.board[pos[0]][pos[1]].value != -1:
+                                self.board[pos[0]][pos[1]].value += 1
