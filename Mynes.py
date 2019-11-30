@@ -120,9 +120,8 @@ class Mynes:
             for board_y in range(self.game_board.height):
                 for board_x in range(self.game_board.width):
                     square = self.game_board.board[board_x][board_y]
-                    square.open()
                     # Square that mouse is over
-                    """if square.hitbox.collidepoint(x, y):
+                    if square.hitbox.collidepoint(x, y):
                         # 1 for left click, 3 for right click
                         if event.button == 1:
                             square.open()
@@ -140,7 +139,7 @@ class Mynes:
                                     self.flag_count -= 1
                                 # removed flag
                                 else:
-                                    self.flag_count += 1"""
+                                    self.flag_count += 1
                                     
 
     def quit(self) -> None:
