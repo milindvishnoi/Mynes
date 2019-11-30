@@ -17,20 +17,20 @@ class MyneSquare:
         self.flag = flag
         self.icon = pygame.image.load(icon)
         self.hitbox = hitbox
+        self.opened = False
 
-    def get_value(self) -> int:
-        """Returns the integer representation of the square
+    def open(self):
+        if self.value == -1 and self.opened == False :
+            self.opened = True
+            self.icon = pygame.image.load("mine.png")
+        elif self.value != -1 and self.opened == False:
+            self.opened = True
+            self.icon = pygame.image.load(str(self.value) + ".png")
 
-        >>> new_square = MyneSquare(0, False, "temp_empty.png", 
-                            pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
-                            for y in range(self.height)] for x in range(self.width)]
-        >>> myne_quare.get_value()
-        -1
-        """
-        return self.value
-    
-
-    def set_value(self, value:int) -> None:
-        """Changes the value of the square to the paramater that is given.
-        """
-        self.value = value
+    def flagging(self):
+        if self.flag == False and self.opened == False:
+            self.flag == True
+            self.icon = pygame.image.load("temp_flag.png")
+        elif self.flag == True and self.opened == False:
+            self.flag == False
+            self.icon = pygame.image.load("temp_empty.png")
