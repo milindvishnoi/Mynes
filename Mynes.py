@@ -91,7 +91,7 @@ class Mynes:
                 square.open()
         self.render()
 
-    def end_game_message(self):
+    def end_game_message(self) -> None:
         """
         Used to display message once the game ends
         """
@@ -102,6 +102,30 @@ class Mynes:
         popup_box.center = (self.width // 2, self.height // 2)
         self.screen.blit(message, popup_box)
         pygame.display.flip()
+
+    def open_multiple(self, x, y) -> None:
+        """
+        It is used to open multiple blocks at once. It recursively opens
+        the block which is adjacent to the clicked block without a value
+        attribute of 0
+
+        :param x: height
+        :param y: width
+        """
+        if not self.game_board.inbound(x, y):
+            return
+        square = self.game_board.board[x][y]
+        if square.value == -1:
+            return
+        if square.opened:
+            return
+        square.open()
+        if square.value > 0:
+            return
+        for (dx, dy) in [(0, 1), (0, -1), (1, 1), (1, -1), (1, 0), (0, 1),
+                         (-1, 1), (-1, -1)]:
+            self.open_multiple(x+dx, y+dy)
+
 
     # ---------Pygame Methods---------- #
     def on_init(self) -> None:
@@ -134,7 +158,10 @@ class Mynes:
                     if square.hitbox.collidepoint(x, y):
                         # 1 for left click, 3 for right click
                         if event.button == 1:
-                            square.open()
+                            if square.value == 0:
+                                self.open_multiple(board_x, board_y)
+                            else:
+                                square.open()
                             if square.value == -1:
                                 self.show_board()
                                 self.end_game_message()
@@ -143,7 +170,7 @@ class Mynes:
                         elif event.button == 3:
                             # Don't place Flag
                             if self.flag_count == 0:
-                                pass
+                                continue
                             else:
                                 square.flagging()
                                 # placed flag
