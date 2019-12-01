@@ -4,6 +4,8 @@
 from MynesBoard import *
 # from MyneGUI import *
 import pygame
+import time
+import ctypes
 
 WHITE = (0, 0, 0)
 BLACK = (0, 0, 0)
@@ -77,28 +79,22 @@ class Mynes:
 
             return True
 
-    def mynes_lost(self) -> None:
+    def show_mines(self) -> None:
         """
-        Mark the game as 'lost' if the player clicks a mine.
+        Opens the blocks with mines in it
+
+        :param myne_lst: list with the mynes location saved
         """
-        # Generate a fail message and text box to be printed in screen center
-        font = pygame.font.Font('freesansbold.ttf', 16)
-        fail_text = font.render("FAIL, CLICK TO EXIT", True, WHITE, BLACK)
-        fail_box = fail_text.get_rect()
-        fail_box.center = (self.width//2, self.height//2)
-
-        self.screen.blit(fail_text, fail_box)
-        pygame.display.flip()
-
-        # End game
-        self._lost = True
+        for board_y in range(self.game_board.height):
+            for board_x in range(self.game_board.width):
+                square = self.game_board.board[board_x][board_y]
+                square.open()
 
     # ---------Pygame Methods---------- #
     def on_init(self) -> None:
         """
         Initialize the game's screen, and begin running the game.
         """
-
         pygame.init()
         self.screen = pygame.display.set_mode \
             ((self.width, self.height), pygame.HWSURFACE | pygame.DOUBLEBUF)
@@ -126,7 +122,7 @@ class Mynes:
                         if event.button == 1:
                             square.open()
                             if square.value == -1:
-                                self.mynes_lost()
+                                self.show_mines()
                         # Right click for Flagging
                         elif event.button == 3:
                             # Don't place Flag
@@ -140,13 +136,11 @@ class Mynes:
                                 # removed flag
                                 else:
                                     self.flag_count += 1
-                                    
 
     def quit(self) -> None:
         """
         Clean up and close the game.
         """
-
         pygame.quit()
 
     def render(self) -> None:
@@ -155,7 +149,6 @@ class Mynes:
         """
         # Stop accepting player inputs when game is lost
         if not self._lost:
-            font = pygame.font.Font('freesansbold.ttf', 12)
             for x in range(self.game_board.width):
                 for y in range(self.game_board.height):
                     # number = font.render(str(self.game_board.board[x][y].value), True, WHITE, BLACK)
@@ -168,14 +161,10 @@ class Mynes:
         """
         Run the game until the game ends.
         """
-        print("running")
         self.on_init()
-        print("running")
         self.screen.fill(WHITE)
         while self._running:
-
             for event in pygame.event.get():
                 self.on_event(event)
                 self.render()
-
         self.quit()

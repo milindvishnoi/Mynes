@@ -20,7 +20,7 @@ class MyneSquare:
         self.opened = False
 
     def open(self):
-        if self.value == -1 and self.opened == False :
+        if self.value == -1 and self.opened == False:
             self.opened = True
             self.icon = pygame.image.load("mine.png")
         elif self.value != -1 and self.opened == False:

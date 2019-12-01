@@ -18,6 +18,7 @@ class MynesBoard:
     # _width: board width (right)
     # _height: board height (down)
     # _mine_count: number of mines placed on the board
+    # _mine_lst: it stores where mines are placed on the board
     board: List[List]
 
     def __init__(self):
@@ -34,7 +35,14 @@ class MynesBoard:
         self.board = [[
             MyneSquare(0, False, "temp_empty.png", pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
             for y in range(self.height)] for x in range(self.width)]
-        # Place mines randomly on the squares
+        self.mine_lst = []
+        self.place_mine()
+        self.place_numbers()
+
+    def place_mine(self) -> None:
+        """
+        Place mines randomly on the squares and store it in a list
+        """
         i = 0
         while i < self.mine_count:
             mine_x, mine_y = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
@@ -42,8 +50,12 @@ class MynesBoard:
             if self.board[mine_y][mine_x].value != -1:
                 self.board[mine_y][mine_x].value = -1
                 i += 1
-            
-        # detects mine and updates the surrounding squares
+                self.mine_lst.append([mine_y, mine_x])
+
+    def place_numbers(self) -> None:
+        """
+        Detects mine and updates the surrounding squares
+        """
         for x in range(self.width):
             for y in range(self.height):
                 if self.board[x][y].value == -1:
