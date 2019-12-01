@@ -74,16 +74,15 @@ class Mynes:
             for x in range(len(self.width)):
                 for y in range(len(self.height)):
                     # Spot has mine but no flag
-                    if (self.game_board.board[x][y].value == -1) and (self.game_board.board[x][y].flag == False):
+                    if (self.game_board.board[x][y].value == -1) and (
+                            self.game_board.board[x][y].flag == False):
                         return False
 
             return True
 
     def show_mines(self) -> None:
         """
-        Opens the blocks with mines in it
-
-        :param myne_lst: list with the mynes location saved
+        Opens the whole board revealing all the mines and numbers
         """
         for board_y in range(self.game_board.height):
             for board_x in range(self.game_board.width):
@@ -152,7 +151,8 @@ class Mynes:
             for x in range(self.game_board.width):
                 for y in range(self.game_board.height):
                     # number = font.render(str(self.game_board.board[x][y].value), True, WHITE, BLACK)
-                    box = pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE)
+                    box = pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE,
+                                      ICON_SIZE)
                     # box = self.game_board.board[x][y].hitbox
                     self.screen.blit(self.game_board.board[x][y].icon, box)
             pygame.display.update()
