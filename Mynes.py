@@ -5,10 +5,9 @@ from MynesBoard import *
 # from MyneGUI import *
 import pygame
 import time
-import ctypes
 
-WHITE = (0, 0, 0)
 BLACK = (0, 0, 0)
+RED = (228, 57, 20)
 ICON_SIZE = 25
 
 
@@ -35,7 +34,8 @@ class Mynes:
     # ---------Mynes methods--------- #
     def __init__(self):
         """
-        Create a Mynes game that has a list of players (mines, numbers, empty spaces, etc)
+        Create a Mynes game that has a list of players (mines, numbers,
+        empty spaces, etc)
         """
         self._running = False
         self._lost = False
@@ -44,7 +44,8 @@ class Mynes:
         self.screen = None
         self.flag_count = self.game_board.mine_count
         # Windows size in pixels
-        self.width, self.height = self.game_board.width * ICON_SIZE, self.game_board.height * ICON_SIZE
+        self.width, self.height = self.game_board.width * ICON_SIZE, \
+                                  self.game_board.height * ICON_SIZE
 
     def get_number(self, x, y) -> int:
         """
@@ -80,7 +81,7 @@ class Mynes:
 
             return True
 
-    def show_mines(self) -> None:
+    def show_board(self) -> None:
         """
         Opens the whole board revealing all the mines and numbers
         """
@@ -88,6 +89,19 @@ class Mynes:
             for board_x in range(self.game_board.width):
                 square = self.game_board.board[board_x][board_y]
                 square.open()
+        self.render()
+
+    def end_game_message(self):
+        """
+        Used to display message once the game ends
+        """
+        # game over
+        font = pygame.font.Font('freesansbold.ttf', 20)
+        message = font.render("Game Over", True, BLACK, RED)
+        popup_box = message.get_rect()
+        popup_box.center = (self.width // 2, self.height // 2)
+        self.screen.blit(message, popup_box)
+        pygame.display.flip()
 
     # ---------Pygame Methods---------- #
     def on_init(self) -> None:
@@ -101,7 +115,8 @@ class Mynes:
 
     def on_event(self, event: pygame.event) -> None:
         """
-        React to the given <event> as appropriate.  Either the player makes a move or quits the game.
+        React to the given <event> as appropriate.  Either the player makes a
+        move or quits the game.
         """
         if event.type == pygame.QUIT:
             self._running = False
@@ -121,7 +136,9 @@ class Mynes:
                         if event.button == 1:
                             square.open()
                             if square.value == -1:
-                                self.show_mines()
+                                self.show_board()
+                                self.end_game_message()
+                                self._lost = True
                         # Right click for Flagging
                         elif event.button == 3:
                             # Don't place Flag
@@ -150,10 +167,8 @@ class Mynes:
         if not self._lost:
             for x in range(self.game_board.width):
                 for y in range(self.game_board.height):
-                    # number = font.render(str(self.game_board.board[x][y].value), True, WHITE, BLACK)
                     box = pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE,
                                       ICON_SIZE)
-                    # box = self.game_board.board[x][y].hitbox
                     self.screen.blit(self.game_board.board[x][y].icon, box)
             pygame.display.update()
 
@@ -162,7 +177,7 @@ class Mynes:
         Run the game until the game ends.
         """
         self.on_init()
-        self.screen.fill(WHITE)
+        self.screen.fill(BLACK)
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
