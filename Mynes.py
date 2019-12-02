@@ -1,10 +1,10 @@
 # Main file for Mynes Game project
 # Controls the game state based on player inputs and updates MynesBoard
 
+from tkinter import *
 from MynesBoard import *
 # from MyneGUI import *
 import pygame
-import time
 
 BLACK = (0, 0, 0)
 RED = (228, 57, 20)
@@ -30,6 +30,7 @@ class Mynes:
     # GUI: MynesGUI
     flag_count: int
     _running: bool
+    _win: bool
 
     # ---------Mynes methods--------- #
     def __init__(self):
@@ -37,8 +38,7 @@ class Mynes:
         Create a Mynes game that has a list of players (mines, numbers,
         empty spaces, etc)
         """
-        self._running = False
-        self._lost = False
+        self._win, self._running, self._lost = False, False, False
         self.game_board = MynesBoard()
         # self.GUI = MynesGUI()
         self.screen = None
@@ -63,24 +63,6 @@ class Mynes:
         """
         return self.board[x][y].flagged
 
-    def mynes_won(self) -> bool:
-        """
-        :return: If player has won the game by flagging all mines.
-        """
-        if self.flag_count > 0:
-            return False
-        else:
-            x = 0
-            y = 0
-            for x in range(len(self.width)):
-                for y in range(len(self.height)):
-                    # Spot has mine but no flag
-                    if (self.game_board.board[x][y].value == -1) and (
-                            self.game_board.board[x][y].flag == False):
-                        return False
-
-            return True
-
     def show_board(self) -> None:
         """
         Opens the whole board revealing all the mines and numbers
@@ -91,18 +73,6 @@ class Mynes:
                 square.open()
         self.render()
 
-    def end_game_message(self) -> None:
-        """
-        Used to display message once the game ends
-        """
-        # game over
-        font = pygame.font.Font('freesansbold.ttf', 20)
-        message = font.render("Game Over", True, BLACK, RED)
-        popup_box = message.get_rect()
-        popup_box.center = (self.width // 2, self.height // 2)
-        self.screen.blit(message, popup_box)
-        pygame.display.flip()
-
     def open_multiple(self, x, y) -> None:
         """
         It is used to open multiple blocks at once. It recursively opens
@@ -112,20 +82,55 @@ class Mynes:
         :param x: height
         :param y: width
         """
+        # base cases
         if not self.game_board.inbound(x, y):
             return
         square = self.game_board.board[x][y]
+        # to check if square is a bomb
         if square.value == -1:
             return
+        # to check if already open or not
         if square.opened:
             return
         square.open()
+        # to check if square is a numbered one
         if square.value > 0:
             return
+        # recursive case
+        # to check in all direction
         for (dx, dy) in [(0, 1), (0, -1), (1, 1), (1, -1), (1, 0), (0, 1),
                          (-1, 1), (-1, -1)]:
             self.open_multiple(x+dx, y+dy)
 
+    def check_win_condition(self) -> None:
+        """
+        It check for the win condition i.e.: if all the squares with mines
+        are flagged
+        """
+        self._win = True
+        # to check if all the blocks with bomb are flagged or not
+        for (board_x, board_y) in self.game_board.mine_lst:
+            square = self.game_board.board[board_x][board_y]
+            if not square.flag:
+                # if not all are flagged then the self._win = False
+                self._win = False
+        # if won then display the win message
+        if self._win:
+            self.show_win_message()
+
+    def show_win_message(self) -> None:
+        """
+        The message we display if the player wins the game by calling the
+        display_message method which is defined under pygame methods
+        """
+        self.display_message("You Won!!")
+
+    def end_game_message(self) -> None:
+        """
+        The message we display if the player loses the game by calling the
+        display_message method which is defined under pygame methods
+        """
+        self.display_message("Game Over")
 
     # ---------Pygame Methods---------- #
     def on_init(self) -> None:
@@ -145,7 +150,7 @@ class Mynes:
         if event.type == pygame.QUIT:
             self._running = False
         # player clicks when game is lost
-        elif event.type == pygame.MOUSEBUTTONUP and self._lost:
+        elif event.type == pygame.MOUSEBUTTONUP and (self._lost or self._win):
             self._running = False
         # player clicks when game is running
         elif event.type == pygame.MOUSEBUTTONUP:
@@ -168,6 +173,7 @@ class Mynes:
                                 self._lost = True
                         # Right click for Flagging
                         elif event.button == 3:
+                            self.check_win_condition()
                             # Don't place Flag
                             if self.flag_count == 0:
                                 continue
@@ -185,6 +191,19 @@ class Mynes:
         Clean up and close the game.
         """
         pygame.quit()
+
+    def display_message(self, text) -> None:
+        """
+        Method is used to display any message once game is over
+
+        :param text: The string you want to display
+        """
+        font = pygame.font.Font('freesansbold.ttf', 20)
+        message = font.render(text, True, BLACK, RED)
+        popup_box = message.get_rect()
+        popup_box.center = (self.width // 2, self.height // 2)
+        self.screen.blit(message, popup_box)
+        pygame.display.flip()
 
     def render(self) -> None:
         """
