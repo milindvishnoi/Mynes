@@ -1,9 +1,7 @@
 # Main file for Mynes Game project
 # Controls the game state based on player inputs and updates MynesBoard
 
-from tkinter import *
 from MynesBoard import *
-# from MyneGUI import *
 import pygame
 
 BLACK = (0, 0, 0)
@@ -40,28 +38,26 @@ class Mynes:
         """
         self._win, self._running, self._lost = False, False, False
         self.game_board = MynesBoard()
-        # self.GUI = MynesGUI()
         self.screen = None
         self.flag_count = self.game_board.mine_count
         # Windows size in pixels
         self.width, self.height = self.game_board.width * ICON_SIZE, \
                                   self.game_board.height * ICON_SIZE
 
-    def get_number(self, x, y) -> int:
+    def flagging(self, square):
         """
-        :param x: x-coordinate on board
-        :param y: y-coordinate on board
-        :return: Number at (x,y) on the board.
-        """
-        return self.board[x][y].number
+        Responsible to display/remove flag on square. It also decided if
+        we need to flag or unflag. This function is also responsible to
+        restrict the number of flags to be equal to number of bombs.
 
-    def get_flag(self, x, y) -> bool:
+        :param square: it is the square we are checking for
         """
-        :param x: x-coordinate on board
-        :param y: y-coordinate on board
-        :return: If a flag is placed at (x,y) on the board.
-        """
-        return self.board[x][y].flagged
+        if self.flag_count > 0 and not square.flag:
+            square.flagging()
+            self.flag_count -= 1
+        elif square.flag:
+            square.unflagging()
+            self.flag_count += 1
 
     def show_board(self) -> None:
         """
@@ -75,8 +71,8 @@ class Mynes:
 
     def open_multiple(self, x, y) -> None:
         """
-        It is used to open multiple blocks at once. It recursively opens
-        the block which is adjacent to the clicked block without a value
+        It is used to open multiple squares at once. It recursively opens
+        the block which is adjacent to the clicked square without a value
         attribute of 0
 
         :param x: height
@@ -163,28 +159,28 @@ class Mynes:
                     if square.hitbox.collidepoint(x, y):
                         # 1 for left click, 3 for right click
                         if event.button == 1:
-                            if square.value == 0:
-                                self.open_multiple(board_x, board_y)
-                            else:
-                                square.open()
-                            if square.value == -1:
-                                self.show_board()
-                                self.end_game_message()
-                                self._lost = True
+
+                            self.on_left_click(square, board_x, board_y)
                         # Right click for Flagging
                         elif event.button == 3:
+                            self.flagging(square)
                             self.check_win_condition()
-                            # Don't place Flag
-                            if self.flag_count == 0:
-                                continue
-                            else:
-                                square.flagging()
-                                # placed flag
-                                if square.flag:
-                                    self.flag_count -= 1
-                                # removed flag
-                                else:
-                                    self.flag_count += 1
+
+    def on_left_click(self, square, board_x, board_y) -> None:
+        """
+        Opens multiple square if square is 0 and opens only one square
+        if square is numbered. It also finishes the game if the clicked square
+        is a mine
+        """
+        if square.value == 0:
+            self.open_multiple(board_x, board_y)
+        else:
+            square.open()
+        if square.value == -1:
+            self.show_board()
+            self.end_game_message()
+            self._lost = True
+        self.check_win_condition()
 
     def quit(self) -> None:
         """
@@ -204,6 +200,7 @@ class Mynes:
         popup_box.center = (self.width // 2, self.height // 2)
         self.screen.blit(message, popup_box)
         pygame.display.flip()
+
 
     def render(self) -> None:
         """
