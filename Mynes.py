@@ -52,21 +52,21 @@ class Mynes:
 
         :param square: it is the square we are checking for
         """
-        if self.flag_count > 0 and not square.flag:
-            square.flagging()
-            self.flag_count -= 1
-        elif square.flag:
-            square.unflagging()
-            self.flag_count += 1
+        if not square.opened:
+            if self.flag_count > 0 and not square.flag:
+                square.flagging()
+                self.flag_count -= 1
+            elif square.flag:
+                square.unflagging()
+                self.flag_count += 1
 
-    def show_board(self) -> None:
+    def show_bombs(self) -> None:
         """
         Opens the whole board revealing all the mines and numbers
         """
-        for board_y in range(self.game_board.height):
-            for board_x in range(self.game_board.width):
-                square = self.game_board.board[board_x][board_y]
-                square.open()
+        for board_x, board_y in self.game_board.mine_lst:
+            square = self.game_board.board[board_x][board_y]
+            square.open()
         self.render()
 
     def open_multiple(self, x, y) -> None:
@@ -88,6 +88,8 @@ class Mynes:
         # to check if already open or not
         if square.opened:
             return
+        if square.flag:
+            self.flag_count += 1
         square.open()
         # to check if square is a numbered one
         if square.value > 0:
@@ -159,7 +161,6 @@ class Mynes:
                     if square.hitbox.collidepoint(x, y):
                         # 1 for left click, 3 for right click
                         if event.button == 1:
-
                             self.on_left_click(square, board_x, board_y)
                         # Right click for Flagging
                         elif event.button == 3:
@@ -172,12 +173,13 @@ class Mynes:
         if square is numbered. It also finishes the game if the clicked square
         is a mine
         """
-        if square.value == 0:
-            self.open_multiple(board_x, board_y)
-        else:
-            square.open()
+        if not square.flag:
+            if square.value == 0:
+                self.open_multiple(board_x, board_y)
+            else:
+                square.open()
         if square.value == -1:
-            self.show_board()
+            self.show_bombs()
             self.end_game_message()
             self._lost = True
         self.check_win_condition()

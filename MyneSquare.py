@@ -25,10 +25,10 @@ class MyneSquare:
         """
         Opens that square by displaying the number/bomb in that block
         """
-        if self.value == -1 and self.opened == False:
+        if self.value == -1 and not self.opened:
             self.opened = True
             self.icon = pygame.image.load("mine.png")
-        elif self.value != -1 and self.opened == False:
+        elif self.value != -1 and not self.opened:
             self.opened = True
             self.icon = pygame.image.load(str(self.value) + ".png")
 
