@@ -1,20 +1,30 @@
-# Pod7
-Pod7 coming up with a game inspired by Minesweeper 
+# Mynes
+Pod7 coming up with a game Mynes, which inspired by Minesweeper 
 
-# Getting Started
+---
 
-# Prerequisites
+## Navigation
+- [Description](##description)
+- [Controls](##controls)
+- [How to Install](##how-to-install)
+- [Authors](##authors)
+---
+## Description
+---
 
-# Installing
+## Controls
+---
+Left Click --> Reveal squares
+[left_click_img](#/Pod7/left_click.png)
 
-# Running the Test
 
-# Deployment
+[Back To The Top](#Mynes)
+## How to Install
+---
 
-# Built With
-* Python - Language used
-* Pygame - The framework used
-
-# Authors
+[Back To The Top](#Mynes)
+## Authors
+---
 * Milind Vishnoi
 
+[Back To The Top](#Mynes)
