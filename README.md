@@ -56,6 +56,6 @@ Copy right © 2019 Pod7
 
 You can find a copy of the License at https://mit-license.org/
 
-License for them is in <blockquote><tt>Public Domain</tt></blockquote>
+License for them is in <tt>Public Domain</tt>
 
 [Back To The Top](#Mynes)
