@@ -7,7 +7,9 @@ Pod7 coming up with a game Mynes, which inspired by Minesweeper
 - [Description](##description)
 - [Controls](##controls)
 - [How to Install](##how-to-install)
-- [Authors](##authors)
+- [Extend the Game](##extend-the-game)
+- [Individual Contributions](##individual-contributions)
+- [Licence Information](##licence-information)
 ---
 ## Description
 ---
@@ -23,8 +25,30 @@ Left Click --> Reveal squares
 ---
 
 [Back To The Top](#Mynes)
-## Authors
+## Extend the Game
+---
+
+[Back To The Top](#Mynes)
+## Individual Contributions
 ---
 * Milind Vishnoi
+I did...
+
+* Arjun Ganguly
+I did...
+
+* Ivy Zhang
+I did...
+
+* Justin Paglia
+I did...
+
+* Min Hyeok Lee
+I did...
+
+
+[Back To The Top](#Mynes)
+## Licence Information
+---
 
 [Back To The Top](#Mynes)
