@@ -44,7 +44,7 @@ I did...
 I did...
 
 * Min Hyeok Lee: 
-Through out the project I have Created "open() and flagging()" method in MyneSquare.py. The "open()" method detects the mouse event and changes the state of square by revealing what is inside. The "flagging()" is to place a flag on the square to remind that the square is a mine. Also in MynesBoard.py, I added the number initialization after placing mynes. It iterates through all the squares on the board and counts the number of mynes surrounding that square. Therefore, when the myne game is initiated, board with mynes and numbers are initialized. Lastly, I have created the license.md for our project
+Through out the project I have Created "open() and flagging()" method in MyneSquare.py. The "open()" method detects the mouse event and changes the state of square by revealing what is inside. The "flagging()" is to place a flag on the square to remind that the square is a mine. Also in MynesBoard.py, I added the number initialization after placing mynes. It iterates through all the squares on the board and counts the number of mynes surrounding that square and save as value in the square. Therefore, when the myne game is initiated, board with mynes and numbers are initialized. Lastly, I have created the license.md for our project
 
 
 [Back To The Top](#Mynes)
@@ -56,5 +56,6 @@ Copy right © 2019 Pod7
 
 You can find a copy of the License at https://mit-license.org/
 
-License for them is in Public Domain
+License for them is in <blockquote><tt>Public Domain</tt></blockquote>
+
 [Back To The Top](#Mynes)
