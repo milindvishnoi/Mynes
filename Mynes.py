@@ -2,12 +2,11 @@
 # Controls the game state based on player inputs and updates MynesBoard
 
 from MynesBoard import *
-# from MyneGUI import *
 import pygame
 
-WHITE = (255, 0, 0)
-BLACK = (255, 255, 255)
-ICON_SIZE = 24
+BLACK = (0, 0, 0)
+RED = (228, 57, 20)
+ICON_SIZE = 25
 
 
 class Mynes:
@@ -29,89 +28,146 @@ class Mynes:
     # GUI: MynesGUI
     flag_count: int
     _running: bool
+    _win: bool
+    _lost: bool
 
     # ---------Mynes methods--------- #
     def __init__(self):
         """
-        Create a Mynes game that has a list of players (mines, numbers, empty spaces, etc)
+        Create a Mynes game that has a list of players (mines, numbers,
+        empty spaces, etc)
         """
-        self._running = False
-        self._lost = False
+        self._win, self._running, self._lost = False, False, False
         self.game_board = MynesBoard()
-        # self.GUI = MynesGUI()
         self.screen = None
         self.flag_count = self.game_board.mine_count
         # Windows size in pixels
-        self.width, self.height = self.game_board.width * ICON_SIZE, self.game_board.height * ICON_SIZE
+        self.width, self.height = self.game_board.width * ICON_SIZE, \
+                                  self.game_board.height * ICON_SIZE
+        self.clock = None
 
-    def get_number(self, x, y) -> int:
+    def flagging(self, square):
         """
-        :param x: x-coordinate on board
-        :param y: y-coordinate on board
-        :return: Number at (x,y) on the board.
-        """
-        return self.board[x][y].number
+        Responsible to display/remove flag on square. It also decided if
+        we need to flag or unflag. This function is also responsible to
+        restrict the number of flags to be equal to number of bombs.
 
-    def get_flag(self, x, y) -> bool:
+        :param square: it is the square we are checking for
         """
-        :param x: x-coordinate on board
-        :param y: y-coordinate on board
-        :return: If a flag is placed at (x,y) on the board.
-        """
-        return self.board[x][y].flagged
+        if not square.opened:
+            if self.flag_count > 0 and not square.flag:
+                square.flagging()
+                self.flag_count -= 1
+            elif square.flag:
+                square.unflagging()
+                self.flag_count += 1
 
-    def mynes_won(self) -> bool:
+    def show_bombs(self) -> None:
         """
-        :return: If player has won the game by flagging all mines.
+        Opens the whole board revealing all the mines and numbers
         """
-        if self.flag_count > 0:
-            return False
-        else:
-            x = 0
-            y = 0
-            for x in range(len(self.width)):
-                for y in range(len(self.height)):
-                    # Spot has mine but no flag
-                    if (self.game_board.board[x][y].value == -1) and (self.game_board.board[x][y].flag == False):
-                        return False
+        for board_x, board_y in self.game_board.mine_lst:
+            square = self.game_board.board[board_x][board_y]
+            square.open()
+        self.render()
 
-            return True
-
-    def mynes_lost(self) -> None:
+    def open_multiple(self, x, y) -> None:
         """
-        Mark the game as 'lost' if the player clicks a mine.
+        It is used to open multiple squares at once. It recursively opens
+        the block which is adjacent to the clicked square without a value
+        attribute of 0
+
+        :param x: height
+        :param y: width
         """
-        # Generate a fail message and text box to be printed in screen center
-        font = pygame.font.Font('freesansbold.ttf', 16)
-        fail_text = font.render("FAIL, CLICK TO EXIT", True, WHITE, BLACK)
-        fail_box = fail_text.get_rect()
-        fail_box.center = (self.width//2, self.height//2)
+        # base cases
+        if not self.game_board.inbound(x, y):
+            return
+        square = self.game_board.board[x][y]
+        # to check if square is a bomb
+        if square.value == -1:
+            return
+        # to check if already open or not
+        if square.opened:
+            return
+        if square.flag:
+            self.flag_count += 1
+        square.open()
+        # to check if square is a numbered one
+        if square.value > 0:
+            return
+        # recursive case
+        # to check in all direction
+        for (dx, dy) in [(0, 1), (0, -1), (1, 1), (1, -1), (1, 0), (0, 1),
+                         (-1, 1), (-1, -1)]:
+            self.open_multiple(x+dx, y+dy)
 
-        self.screen.blit(fail_text, fail_box)
-        pygame.display.flip()
+    def check_win_condition(self) -> None:
+        """
+        It check for the win condition i.e.: if all the squares with mines
+        are flagged
+        """
+        self._win = True
+        # to check if all the blocks with bomb are flagged or not
+        for (board_x, board_y) in self.game_board.mine_lst:
+            square = self.game_board.board[board_x][board_y]
+            if not square.flag:
+                # if not all are flagged then the self._win = False
+                self._win = False
+        # if won then display the win message
+        if self._win:
+            self.show_win_message()
 
-        # End game
-        self._lost = True
+    def show_win_message(self) -> None:
+        """
+        The message we display if the player wins the game by calling the
+        display_message method which is defined under pygame methods
+        """
+        self.display_message("You Won!!")
+
+    def end_game_message(self) -> None:
+        """
+        The message we display if the player loses the game by calling the
+        display_message method which is defined under pygame methods
+        """
+        self.display_message("Game Over")
 
     # ---------Pygame Methods---------- #
     def on_init(self) -> None:
         """
         Initialize the game's screen, and begin running the game.
         """
-
         pygame.init()
         self.screen = pygame.display.set_mode \
-            ((self.width, self.height), pygame.HWSURFACE | pygame.DOUBLEBUF)
+            ((self.width, self.height + 70), pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
+        clock = pygame.time.Clock()
+        self.clock = clock
+
+    def flag_counter(self) -> None:
+        """
+        Draws a rectangle under the game board. The rectangle contains text
+        that reveals how many (correct) flags the user must place to win the
+        game.
+        """
+        font = pygame.font.Font("freesansbold.ttf", 18)
+        display_text = "Flags Remaining: " + str(self.flag_count)
+        text_surface = font.render(display_text, True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(self.width / 2, self.height + 20))
+        pygame.draw.rect(self.screen, (0, 0, 0), text_rect, 20)
+        self.screen.blit(text_surface, text_rect)
+
+        pygame.display.update()
 
     def on_event(self, event: pygame.event) -> None:
         """
-        React to the given <event> as appropriate.  Either the player makes a move or quits the game.
+        React to the given <event> as appropriate.  Either the player makes a
+        move or quits the game.
         """
         if event.type == pygame.QUIT:
             self._running = False
         # player clicks when game is lost
-        elif event.type == pygame.MOUSEBUTTONUP and self._lost:
+        elif event.type == pygame.MOUSEBUTTONUP and (self._lost or self._win):
             self._running = False
         # player clicks when game is running
         elif event.type == pygame.MOUSEBUTTONUP:
@@ -124,32 +180,49 @@ class Mynes:
                     if square.hitbox.collidepoint(x, y):
                         # 1 for left click, 3 for right click
                         if event.button == 1:
-                            if square.value == -1:
-                                self.mynes_lost()
-                            # else:
-                            # self.board.clear_spaces
+                            self.on_left_click(square, board_x, board_y)
                         # Right click for Flagging
                         elif event.button == 3:
-                            # Remove Flag
-                            if square.flag:
-                                square.flag = False
-                                self.flag_count += 1
-                                square.icon = pygame.image.load("temp_empty.png")
-                            # Don't Place Flag
-                            elif (not square.flag) and self.flag_count == 0:
-                                pass
-                            # Place Flag
-                            else:
-                                square.flag = True
-                                self.flag_count -= 1
-                                square.icon = pygame.image.load("temp_flag.png")
+                            self.flagging(square)
+                            self.check_win_condition()
+                            self.flag_counter()
+        self.flag_counter()
+
+    def on_left_click(self, square, board_x, board_y) -> None:
+        """
+        Opens multiple square if square is 0 and opens only one square
+        if square is numbered. It also finishes the game if the clicked square
+        is a mine
+        """
+        if not square.flag:
+            if square.value == 0:
+                self.open_multiple(board_x, board_y)
+            else:
+                square.open()
+        if square.value == -1:
+            self.show_bombs()
+            self.end_game_message()
+            self._lost = True
+        self.check_win_condition()
 
     def quit(self) -> None:
         """
         Clean up and close the game.
         """
-
         pygame.quit()
+
+    def display_message(self, text) -> None:
+        """
+        Method is used to display any message once game is over
+
+        :param text: The string you want to display
+        """
+        font = pygame.font.Font('freesansbold.ttf', 20)
+        message = font.render(text, True, BLACK, RED)
+        popup_box = message.get_rect()
+        popup_box.center = (self.width // 2, self.height // 2)
+        self.screen.blit(message, popup_box)
+        pygame.display.flip()
 
     def render(self) -> None:
         """
@@ -157,12 +230,10 @@ class Mynes:
         """
         # Stop accepting player inputs when game is lost
         if not self._lost:
-            font = pygame.font.Font('freesansbold.ttf', 12)
             for x in range(self.game_board.width):
                 for y in range(self.game_board.height):
-                    # number = font.render(str(self.game_board.board[x][y].value), True, WHITE, BLACK)
-                    box = pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE)
-                    # box = self.game_board.board[x][y].hitbox
+                    box = pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE,
+                                      ICON_SIZE)
                     self.screen.blit(self.game_board.board[x][y].icon, box)
             pygame.display.update()
 
@@ -170,14 +241,35 @@ class Mynes:
         """
         Run the game until the game ends.
         """
-        print("running")
         self.on_init()
-        print("running")
-        self.screen.fill(WHITE)
-        while self._running:
+        self.screen.fill(BLACK)
+        minutes = 0
+        seconds = 0
+        milliseconds = 0
 
+        while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
-                self.render()
+                if not self._win:
+                    self.render()
+            if not self._win and not self._lost:
+                if milliseconds > 1000:
+                    seconds += 1
+                    milliseconds -= 1000
+
+                if seconds > 60:
+                    minutes += 1
+                    seconds -= 60
+
+                milliseconds += self.clock.tick_busy_loop(60)
+                font = pygame.font.Font("freesansbold.ttf", 18)
+                display_text = "Time: " + "{} : {}".format(minutes, seconds)
+                text_surface = font.render(display_text, True, (255, 255, 255))
+                text_rect = text_surface.get_rect(
+                    center=(self.width / 2, self.height + 50))
+                pygame.draw.rect(self.screen, (0, 0, 0), text_rect, 20)
+                self.screen.blit(text_surface, text_rect)
+
+                pygame.display.update()
 
         self.quit()
