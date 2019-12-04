@@ -29,6 +29,7 @@ class Mynes:
     flag_count: int
     _running: bool
     _win: bool
+    _lost: bool
 
     # ---------Mynes methods--------- #
     def __init__(self):
@@ -43,6 +44,7 @@ class Mynes:
         # Windows size in pixels
         self.width, self.height = self.game_board.width * ICON_SIZE, \
                                   self.game_board.height * ICON_SIZE
+        self.clock = None
 
     def flagging(self, square):
         """
@@ -137,8 +139,10 @@ class Mynes:
         """
         pygame.init()
         self.screen = pygame.display.set_mode \
-            ((self.width, self.height), pygame.HWSURFACE | pygame.DOUBLEBUF)
+            ((self.width + 110, self.height), pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
+        clock = pygame.time.Clock()
+        self.clock = clock
 
     def on_event(self, event: pygame.event) -> None:
         """
@@ -198,11 +202,16 @@ class Mynes:
         """
         font = pygame.font.Font('freesansbold.ttf', 20)
         message = font.render(text, True, BLACK, RED)
+        """
+        cover = pygame.surface.Surface((150, 50)).convert()
+        cover.fill((0, 0, 0))
+        self.screen.blit(cover, (self.width // 2-50, self.height // 2-50))
+        """
         popup_box = message.get_rect()
         popup_box.center = (self.width // 2, self.height // 2)
         self.screen.blit(message, popup_box)
+        # self.screen.blit(message, (self.width // 2-40, self.height // 2-40))
         pygame.display.flip()
-
 
     def render(self) -> None:
         """
@@ -223,8 +232,34 @@ class Mynes:
         """
         self.on_init()
         self.screen.fill(BLACK)
+        minutes = 0
+        seconds = 0
+        milliseconds = 0
+
+        cover = pygame.surface.Surface((160, 500)).convert()
+        cover.fill((128, 128, 128))
+        self.screen.blit(cover, (self.width + 1, 1))
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
-                self.render()
+                if not self._win:
+                    self.render()
+            if not self._win and not self._lost:
+                if milliseconds > 1000:
+                    seconds += 1
+                    milliseconds -= 1000
+                    self.screen.blit(cover, (self.width+1, 1))
+                    pygame.display.update()
+
+                if seconds > 60:
+                    minutes += 1
+                    seconds -= 60
+                milliseconds += self.clock.tick_busy_loop(60)
+                font = pygame.font.SysFont("courier new", 25)
+                time_label = font.render("Time: "
+                                         + "{} : {}".format(minutes, seconds),
+                                         1, (255, 255, 255))
+                self.screen.blit(time_label, (self.width+7, 7))
+                pygame.display.update()
+
         self.quit()
