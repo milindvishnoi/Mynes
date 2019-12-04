@@ -59,8 +59,8 @@ The MIT License (MIT)
 
 Copy right © 2019 Pod7
 
-You can find a copy of the License at https://mit-license.org/
+You can find a copy of the License at file <tt>LICENSE</tt>
 
-License for them is in Public Domain
+License for them is in <tt>Public Domain</tt>
 
 [Back To The Top](#Mynes)
