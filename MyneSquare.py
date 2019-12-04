@@ -27,10 +27,10 @@ class MyneSquare:
         """
         if self.value == -1 and not self.opened:
             self.opened = True
-            self.icon = pygame.image.load("mine.png")
+            self.icon = pygame.image.load("Icons/mine.png")
         elif self.value != -1 and not self.opened:
             self.opened = True
-            self.icon = pygame.image.load(str(self.value) + ".png")
+            self.icon = pygame.image.load("Icons/" + str(self.value) + ".png")
 
     def flagging(self) -> None:
         """
@@ -38,9 +38,9 @@ class MyneSquare:
         """
         if not (self.flag and self.opened):
             self.flag = True
-            self.icon = pygame.image.load("temp_flag.png")
+            self.icon = pygame.image.load("Icons/temp_flag.png")
 
     def unflagging(self) -> None:
         if self.flag and not self.opened:
             self.flag = False
-            self.icon = pygame.image.load("temp_empty.png")
+            self.icon = pygame.image.load("Icons/temp_empty.png")

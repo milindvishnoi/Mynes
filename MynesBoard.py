@@ -33,7 +33,7 @@ class MynesBoard:
         self.mine_count = 10
         # Construct board of empty squares
         self.board = [[
-            MyneSquare(0, False, "temp_empty.png", pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
+            MyneSquare(0, False, "Icons/temp_empty.png", pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
             for y in range(self.height)] for x in range(self.width)]
         self.mine_lst = []
         self.place_mine()
