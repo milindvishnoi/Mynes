@@ -40,7 +40,6 @@ Mynes is a game where you need to use logic to find out all the underlying mines
 ---
 
 [Back To The Top](#Mynes)
->>>>>>> Yang
 ## <a name="individual-contributions"></a>Individual Contributions
 ---
 * Milind Vishnoi: 
@@ -51,7 +50,6 @@ I did...
 
 * Yang Zhang: 
 I created the timer feature and fixed the win message bug. And I reorganized the game window to show the flag counter and timer. The timer starts when the pygame is run, and keep running until the player loses or wins the game. Then I placed timer and flag counter at the bottom of the pygame window. The win message cannot show up because pygame.display.flip() is called twice after the player wins. I fixed this bug and also created a few test cases for MyneSquare and MyneBoard. Finally, I completed description and controls for my game.
->>>>>>> Yang
 
 * Justin Paglia: 
 I did...
