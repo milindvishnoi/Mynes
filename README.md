@@ -7,6 +7,7 @@ Pod7 coming up with a game Mynes, which inspired by Minesweeper
 - [Description](#description)
 - [Controls](#controls)
 - [How to Install](#how-to-install)
+- [Project Structure](#structure)
 - [Extend the Game](#extend-the-game)
 - [Individual Contributions](#individual-contributions)
 - [Licence Information](#licence-information)
@@ -22,6 +23,10 @@ Left Click --> Reveal squares
 
 [Back To The Top](#Mynes)
 ## <a name="how-to-install"></a> How to Install
+---
+
+[Back To The Top](#Mynes)
+## <a name="structure"></a> Project Structure
 ---
 
 [Back To The Top](#Mynes)
