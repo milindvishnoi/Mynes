@@ -137,8 +137,25 @@ class Mynes:
         """
         pygame.init()
         self.screen = pygame.display.set_mode \
-            ((self.width, self.height), pygame.HWSURFACE | pygame.DOUBLEBUF)
+            ((self.width, self.height + 40), pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
+        self.flag_counter()
+
+    def flag_counter(self) -> None:
+        """
+        Draws a rectangle under the game board. The rectangle contains text
+        that reveals how many (correct) flags the user must place to win the
+        game.
+        """
+        font = pygame.font.Font("freesansbold.ttf", 18)
+        display_text = "Flags Remaining: " + str(self.flag_count)
+        text_surface = font.render(display_text, True, (255,255,255))
+        text_rect = text_surface.get_rect(center=(self.width /2, self.height + 20))
+        pygame.draw.rect(self.screen, (0,0,0), text_rect, 20)
+        self.screen.blit(text_surface, text_rect)
+
+        pygame.display.update()
+
 
     def on_event(self, event: pygame.event) -> None:
         """
@@ -166,6 +183,8 @@ class Mynes:
                         elif event.button == 3:
                             self.flagging(square)
                             self.check_win_condition()
+                            self.flag_counter()
+        self.flag_counter()
 
     def on_left_click(self, square, board_x, board_y) -> None:
         """
@@ -216,6 +235,10 @@ class Mynes:
                                       ICON_SIZE)
                     self.screen.blit(self.game_board.board[x][y].icon, box)
             pygame.display.update()
+
+
+
+
 
     def execute(self) -> None:
         """
