@@ -144,28 +144,6 @@ class Mynes:
         clock = pygame.time.Clock()
         self.clock = clock
 
-    """
-            ((self.width, self.height + 40), pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self._running = True
-        self.flag_counter()
-
-    def flag_counter(self) -> None:
-        
-        Draws a rectangle under the game board. The rectangle contains text
-        that reveals how many (correct) flags the user must place to win the
-        game.
-        
-        font = pygame.font.Font("freesansbold.ttf", 18)
-        display_text = "Flags Remaining: " + str(self.flag_count)
-        text_surface = font.render(display_text, True, (255,255,255))
-        text_rect = text_surface.get_rect(center=(self.width /2, self.height + 20))
-        pygame.draw.rect(self.screen, (0,0,0), text_rect, 20)
-        self.screen.blit(text_surface, text_rect)
-
-        pygame.display.update()
-
-
-        """
     def flag_counter(self) -> None:
         """
         Draws a rectangle under the game board. The rectangle contains text
@@ -269,9 +247,6 @@ class Mynes:
         seconds = 0
         milliseconds = 0
 
-        # cover = pygame.surface.Surface((160, 500)).convert()
-        # cover.fill((128, 128, 128))
-        # self.screen.blit(cover, (self.width + 1, 1))
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
@@ -281,8 +256,6 @@ class Mynes:
                 if milliseconds > 1000:
                     seconds += 1
                     milliseconds -= 1000
-                    # self.screen.blit(cover, (self.width+1, 1))
-                    # pygame.display.update()
 
                 if seconds > 60:
                     minutes += 1
@@ -293,7 +266,7 @@ class Mynes:
                 display_text = "Time: " + "{} : {}".format(minutes, seconds)
                 text_surface = font.render(display_text, True, (255, 255, 255))
                 text_rect = text_surface.get_rect(
-                    center=(self.width / 3, self.height + 50))
+                    center=(self.width / 2, self.height + 50))
                 pygame.draw.rect(self.screen, (0, 0, 0), text_rect, 20)
                 self.screen.blit(text_surface, text_rect)
 
