@@ -29,6 +29,7 @@ class Mynes:
     flag_count: int
     _running: bool
     _win: bool
+    _lost: bool
 
     # ---------Mynes methods--------- #
     def __init__(self):
@@ -43,6 +44,7 @@ class Mynes:
         # Windows size in pixels
         self.width, self.height = self.game_board.width * ICON_SIZE, \
                                   self.game_board.height * ICON_SIZE
+        self.clock = None
 
     def flagging(self, square):
         """
@@ -137,16 +139,22 @@ class Mynes:
         """
         pygame.init()
         self.screen = pygame.display.set_mode \
+            ((self.width, self.height + 70), pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self._running = True
+        clock = pygame.time.Clock()
+        self.clock = clock
+
+    """
             ((self.width, self.height + 40), pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
         self.flag_counter()
 
     def flag_counter(self) -> None:
-        """
+        
         Draws a rectangle under the game board. The rectangle contains text
         that reveals how many (correct) flags the user must place to win the
         game.
-        """
+        
         font = pygame.font.Font("freesansbold.ttf", 18)
         display_text = "Flags Remaining: " + str(self.flag_count)
         text_surface = font.render(display_text, True, (255,255,255))
@@ -156,6 +164,22 @@ class Mynes:
 
         pygame.display.update()
 
+
+        """
+    def flag_counter(self) -> None:
+        """
+        Draws a rectangle under the game board. The rectangle contains text
+        that reveals how many (correct) flags the user must place to win the
+        game.
+        """
+        font = pygame.font.Font("freesansbold.ttf", 18)
+        display_text = "Flags Remaining: " + str(self.flag_count)
+        text_surface = font.render(display_text, True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(self.width / 2, self.height + 20))
+        pygame.draw.rect(self.screen, (0, 0, 0), text_rect, 20)
+        self.screen.blit(text_surface, text_rect)
+
+        pygame.display.update()
 
     def on_event(self, event: pygame.event) -> None:
         """
@@ -222,7 +246,6 @@ class Mynes:
         self.screen.blit(message, popup_box)
         pygame.display.flip()
 
-
     def render(self) -> None:
         """
         Call MynesGUI to render the pygame screen.
@@ -236,18 +259,44 @@ class Mynes:
                     self.screen.blit(self.game_board.board[x][y].icon, box)
             pygame.display.update()
 
-
-
-
-
     def execute(self) -> None:
         """
         Run the game until the game ends.
         """
         self.on_init()
         self.screen.fill(BLACK)
+        minutes = 0
+        seconds = 0
+        milliseconds = 0
+
+        # cover = pygame.surface.Surface((160, 500)).convert()
+        # cover.fill((128, 128, 128))
+        # self.screen.blit(cover, (self.width + 1, 1))
         while self._running:
             for event in pygame.event.get():
                 self.on_event(event)
-                self.render()
+                if not self._win:
+                    self.render()
+            if not self._win and not self._lost:
+                if milliseconds > 1000:
+                    seconds += 1
+                    milliseconds -= 1000
+                    # self.screen.blit(cover, (self.width+1, 1))
+                    # pygame.display.update()
+
+                if seconds > 60:
+                    minutes += 1
+                    seconds -= 60
+
+                milliseconds += self.clock.tick_busy_loop(60)
+                font = pygame.font.Font("freesansbold.ttf", 18)
+                display_text = "Time: " + "{} : {}".format(minutes, seconds)
+                text_surface = font.render(display_text, True, (255, 255, 255))
+                text_rect = text_surface.get_rect(
+                    center=(self.width / 3, self.height + 50))
+                pygame.draw.rect(self.screen, (0, 0, 0), text_rect, 20)
+                self.screen.blit(text_surface, text_rect)
+
+                pygame.display.update()
+
         self.quit()
