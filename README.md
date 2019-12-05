@@ -30,6 +30,13 @@ Mynes is a game where you need to use logic to find out all the underlying mines
 [Back To The Top](#Mynes)
 ## <a name="how-to-install"></a> How to Install
 ---
+To install the game you need to type this code into the terminal/cmd.
+
+> pip install https://github.com/milindvishnoi/Pod7.git
+
+This command will install the game to your computer, if it doesn't please contact me on milindvishnoi@gmail.com. 
+
+Enjoy our game!
 
 [Back To The Top](#Mynes)
 ## <a name="structure"></a> Project Structure
@@ -43,7 +50,8 @@ Mynes is a game where you need to use logic to find out all the underlying mines
 ## <a name="individual-contributions"></a>Individual Contributions
 ---
 * Milind Vishnoi: 
-I did...
+I created the win_condition method. The purpose of this method is to close the execution of the application. The win_condition method checks to see if all the squares with the bombs are already flagged or not. Furthermore the  implementation of the multiple_open_square method was also done by me. The multiple_open_square method was implemented to recursively open multiple squares. This is done when the squares value is 0. If the value of the squares is equal to 0 then the recursion continues, if the value fails to equal 0 then it stops. 
+Next off, I also fixed the functionality of other methods. There was no limit to flagging the number of sqaures. I made changes to the implementation of the flagging function, so that the number of flags would be equal to the number of bombs. Additionally a condition which would show all the bombs once the game ends was added aswell. Lastly, I also added a condition that restricted the user to only flag closed squares. 
 
 * Arjun Ganguly: 
 I did...
