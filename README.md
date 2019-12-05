@@ -19,12 +19,16 @@ Mynes is a game where you need to use logic to find out all the underlying mines
 ## <a name="controls"></a>Controls
 ---
 * Left Click --> Reveal squares
+![](Icons/1.png) or ![](Icons/mine.png)
 
 * Right Click --> Flag squares
+![](Icons/temp_flag.png)
 
 * After you flag all the mines, if the game finds that you flag some of the numbers, not mines, lose message will show up. If you left click on mines, lose message will also show up.
 
 * If all flags correspond to all mines, win message will show up. 
+
+* Flag counter will change every time you flag a mine.
 
 
 [Back To The Top](#Mynes)
