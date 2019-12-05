@@ -30,6 +30,7 @@ Left Click --> Reveal squares
 ---
 #### File Structure
 * All code and github related files are stored in the project directory.
+* All unit testing files are located in the "MyneTest" folder.
 * All images used (0-8, empty, mine, and flag) are stored in the "Icons" folder.
 
 ![](Icons/mine.png)![](Icons/temp_empty.png)![](Icons/temp_flag.png)![](Icons/0.png)![](Icons/1.png)![](Icons/2.png)![](Icons/3.png)![](Icons/4.png)![](Icons/5.png)![](Icons/6.png)![](Icons/7.png)![](Icons/8.png)
