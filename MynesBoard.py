@@ -10,22 +10,19 @@ ICON_SIZE = 24
 class MynesBoard:
     """
     === Public Attributes ===
-    board:  Matrix representation of the board state, to be used by Mynes
+    board (List[List[MyneSquare]]]):  Matrix representation of the board state, to be used by Mynes
 
+    === Private Attributes ===
+    # _width (int): board width (right)
+    # _height (int): board height (down)
+    # _mine_count (int): number of mines placed on the board
+    # _mine_lst (List[Tuple(int, int)]): stores where mines are placed on the board
     """
-
-    # === Private Attributes ===
-    # _width: board width (right)
-    # _height: board height (down)
-    # _mine_count: number of mines placed on the board
-    # _mine_lst: it stores where mines are placed on the board
-    board: List[List]
 
     def __init__(self):
         """
-        Create a code base board for Mynes, size and mine count is based on difficulty.
+        Create a base board for Mynes. Default values for width, height, and mine count.
         (0,0) is the top-left of the board.
-
         """
         # Board size in playable spaces
         self.width = 10
@@ -43,7 +40,7 @@ class MynesBoard:
 
     def place_mine(self) -> None:
         """
-        Place mines randomly on the squares and store it in a list
+        Place mines randomly on the squares and store coordinates in self.mine_lst
         """
         i = 0
         while i < self.mine_count:
@@ -54,7 +51,7 @@ class MynesBoard:
                 i += 1
                 self.mine_lst.append([mine_y, mine_x])
 
-    def place_numbers(self, x, y) -> None:
+    def place_numbers(self, x: int, y: int) -> None:
         """
         Detects mine and updates the surrounding squares
         """
@@ -69,7 +66,7 @@ class MynesBoard:
                         bombs_surrounded += 1
         return bombs_surrounded
 
-    def inbound(self, x, y) -> bool:
+    def inbound(self, x: int, y: int) -> bool:
         """
         Used to check if the square exists inside the game board or not
         :param x: height

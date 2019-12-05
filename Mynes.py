@@ -14,22 +14,18 @@ class Mynes:
     This class is the main running Mynes game.
 
     === Attributes ===
-    screen: uses the screen from MynesGUI
-    board: uses the board from MyneBoard
-    flag_count: Keeps track of how many flags the player has available to place
+    game_board (MynesBoard): the board that is being played on
+    screen (pygame.display): uses the screen from MynesGUI
+    flag_count (int): Keeps track of how many flags the player has available to place
+    clock (pygame.time): The time that the user has taken to play the game
+    width (int): the width of the board, in pixels
+    height (int): the height of the board, in pixels
 
+    === Private Attributes ===
+    _running (bool): whether the game is running or should be stopped
+    _win (bool): whether the game has been won
+    _lost (bool): whether the game has been lost
     """
-
-    # === Private Attributes ===
-    # _running: pygame attribute that runs or stops the game
-    # _flags_placed: Keeps track of how many flag objects are on the board
-
-    game_board: MynesBoard
-    # GUI: MynesGUI
-    flag_count: int
-    _running: bool
-    _win: bool
-    _lost: bool
 
     # ---------Mynes methods--------- #
     def __init__(self):
@@ -71,7 +67,7 @@ class Mynes:
             square.open()
         self.render()
 
-    def open_multiple(self, x, y) -> None:
+    def open_multiple(self, x: int, y: int) -> None:
         """
         It is used to open multiple squares at once. It recursively opens
         the block which is adjacent to the clicked square without a value
@@ -80,24 +76,24 @@ class Mynes:
         :param x: height
         :param y: width
         """
-        # base cases
+        # Base cases
         if not self.game_board.inbound(x, y):
             return
         square = self.game_board.board[x][y]
-        # to check if square is a bomb
+        # To check if square is a bomb
         if square.value == -1:
             return
-        # to check if already open or not
+        # To check if already open or not
         if square.opened:
             return
         if square.flag:
             self.flag_count += 1
         square.open()
-        # to check if square is a numbered one
+        # To check if square is a numbered one
         if square.value > 0:
             return
-        # recursive case
-        # to check in all direction
+        # Recursive case
+        # To check in all direction
         for (dx, dy) in [(0, 1), (0, -1), (1, 1), (1, -1), (1, 0), (0, 1),
                          (-1, 1), (-1, -1)]:
             self.open_multiple(x+dx, y+dy)
@@ -108,13 +104,13 @@ class Mynes:
         are flagged
         """
         self._win = True
-        # to check if all the blocks with bomb are flagged or not
+        # To check if all the blocks with bomb are flagged or not
         for (board_x, board_y) in self.game_board.mine_lst:
             square = self.game_board.board[board_x][board_y]
             if not square.flag:
                 # if not all are flagged then the self._win = False
                 self._win = False
-        # if won then display the win message
+        # If won then display the win message
         if self._win:
             self.show_win_message()
 
@@ -166,10 +162,10 @@ class Mynes:
         """
         if event.type == pygame.QUIT:
             self._running = False
-        # player clicks when game is lost
+        # Player clicks when game is lost
         elif event.type == pygame.MOUSEBUTTONUP and (self._lost or self._win):
             self._running = False
-        # player clicks when game is running
+        # Player clicks when game is running
         elif event.type == pygame.MOUSEBUTTONUP:
             (x, y) = pygame.mouse.get_pos()
             # Loop through MyneSquare objects
@@ -261,6 +257,7 @@ class Mynes:
                     minutes += 1
                     seconds -= 60
 
+                # Adding time and rendering it to screen
                 milliseconds += self.clock.tick_busy_loop(60)
                 font = pygame.font.Font("freesansbold.ttf", 18)
                 display_text = "Time: " + "{} : {}".format(minutes, seconds)

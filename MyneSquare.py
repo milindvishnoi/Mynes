@@ -1,19 +1,20 @@
 import pygame
 from Mynes import *
 
-
 class MyneSquare:
     """
     An object that acts as a playable space on the board.
+
+    === Public Attributes ===
+    value (int):  Value of the square; -1 is a Mine, 0 is an empty space, [1,8] are spaces with adjacent mines
+    flag (bool): Whether this square is flagged
+    icon (string): The .png file of the square
+    hitbox (pygame.rect): Pygame rectangle for square
     """
 
     def __init__(self, value: int, flag: bool, icon: str, hitbox: pygame.rect):
         """
         Creates a new square object for the board.
-        :param value: Integer that tells Mynes what is on this square.
-        -1 is a Mine, 0 is an empty space, [1,8] are spaces with adjacent mines
-        :param flag: Boolean attribute for if a flag is placed on top of this
-        square.
         """
         self.value = value
         self.flag = flag
@@ -41,6 +42,9 @@ class MyneSquare:
             self.icon = pygame.image.load("Icons/temp_flag.png")
 
     def unflagging(self) -> None:
+        """
+        Used to remove a flag from a square
+        """
         if self.flag and not self.opened:
             self.flag = False
             self.icon = pygame.image.load("Icons/temp_empty.png")
