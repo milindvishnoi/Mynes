@@ -77,6 +77,31 @@ This is a breakdown of each file's methods and what they do, in the order that t
 [Back To The Top](#Mynes)
 ## <a name="extend-the-game"></a>Extend the Game
 ---
+All developers are encouraged to not only install and play this game, but to extend it as well. All source code is available for anyone who wishes to make any tweaks. Whether one wishes to make the game harder, make the game easier, or add more attractive animations, we want developers to have the ability to do so. Feel free to read through the project structure above to understand how the game works before adding any tweaks.
+
+
+Some suggested tweaks:
+* Making the game board larger
+* Adding more mynes to the game board
+* Creating different levels to make the game progressively harder
+* Creative animation if a game is lost
+* Ability to play the game using only a keyboard
+
+Example:
+Here is how one would make the game board larger and add more mines to the game. In [MynesBoard.py](MynesBoard.py), the initializer defines three specific attributes that can be changed to make the game easier or harder.
+
+```Python
+    def __init__(self):
+        """
+        Create a code base board for Mynes, size and mine count is based on difficulty.
+        (0,0) is the top-left of the board.
+        """
+        # Board size in playable spaces
+        self.width = 10 # Default value is 10, but can be changed to any number
+        self.height = 10 # Default value is 10, but can be changed to any number
+        self.mine_count = 10 # Default value is 10, but can be changed to any number
+        ...
+```
 
 [Back To The Top](#Mynes)
 ## <a name="individual-contributions"></a>Individual Contributions
@@ -86,7 +111,7 @@ I created the win_condition method. The purpose of this method is to close the e
 Next off, I also fixed the functionality of other methods. There was no limit to flagging the number of sqaures. I made changes to the implementation of the flagging function, so that the number of flags would be equal to the number of bombs. Additionally a condition which would show all the bombs once the game ends was added aswell. Lastly, I also added a condition that restricted the user to only flag closed squares. 
 
 * Arjun Ganguly: 
-I did...
+In the initial stages of the project, I made a string reperesentation of the board that can be displayed to the console. This made working on the game much easier when the Pygame implementation had not been done. I also created a method to determine the specific numbers that a square on the board should assume. Each number corresponds to how many mines are adjacent to a square. Once the pygame GUI was implemented, I made the number icons for the board. I generated the correct number on the GUI for each non-mine square on the game board. During the final stage of writing code, I created a working flag counter that displayed how many remaining flags the user must place in order to win the game. Finally, I wrote the "Extend the Game" section on the README.md file. I also formatted the README so that a user could navigate through the page by clicking section headings at the top of the file or "Back to the Top" at the end of a section. 
 
 * Yang Zhang: 
 I created the timer feature and fixed the win message bug. And I reorganized the game window to show the flag counter and timer. The timer starts when the pygame is run, and keep running until the player loses or wins the game. Then I placed timer and flag counter at the bottom of the pygame window. The win message cannot show up because pygame.display.flip() is called twice after the player wins. I fixed this bug and also created a few test cases for MyneSquare and MyneBoard. Finally, I completed description and controls for my game.
