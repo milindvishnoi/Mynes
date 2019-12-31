@@ -4,8 +4,8 @@ of this class to play the game.
 """
 
 from Mynes import Mynes
+from MainWindow import MainWindow
 
 if __name__ == "__main__":
-    mynes = Mynes()
-    mynes.execute()
-
+    mainWindow = MainWindow()
+    mainWindow.execute()

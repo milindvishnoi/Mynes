@@ -28,13 +28,13 @@ class Mynes:
     """
 
     # ---------Mynes methods--------- #
-    def __init__(self):
+    def __init__(self, mode: str):
         """
         Create a Mynes game that has a list of players (mines, numbers,
         empty spaces, etc)
         """
         self._win, self._running, self._lost = False, False, False
-        self.game_board = MynesBoard()
+        self.game_board = MynesBoard(mode)
         self.screen = None
         self.flag_count = self.game_board.mine_count
         # Windows size in pixels

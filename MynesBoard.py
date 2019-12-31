@@ -19,24 +19,35 @@ class MynesBoard:
     # _mine_lst (List[Tuple(int, int)]): stores where mines are placed on the board
     """
 
-    def __init__(self):
+    def __init__(self, mode: str):
         """
         Create a base board for Mynes. Default values for width, height, and mine count.
         (0,0) is the top-left of the board.
         """
+        num_of_blocks, num_of_bombs = self.create_board(mode)
         # Board size in playable spaces
-        self.width = 10
-        self.height = 10
-        self.mine_count = 10
+        self.width, self.height = num_of_blocks, num_of_blocks
+        self.mine_count = num_of_bombs
         # Construct board of empty squares
         self.board = [[
-            MyneSquare(0, False, "Icons/temp_empty.png", pygame.Rect(x * ICON_SIZE, y * ICON_SIZE, ICON_SIZE, ICON_SIZE))
+            MyneSquare(0, False, "Icons/temp_empty.png",
+                       pygame.Rect(x * ICON_SIZE, y * ICON_SIZE,
+                                   ICON_SIZE, ICON_SIZE))
             for y in range(self.height)] for x in range(self.width)]
         self.mine_lst = []
         self.place_mine()
         for x in range(self.width):
             for y in range(self.height):
                 self.place_numbers(x, y)
+
+    def create_board(self, mode)-> int:
+        """Return the """
+        if mode == "Easy":
+            return (10, 10)
+        elif mode == "Medium":
+            return (20, 50)
+        else:
+            return (30, 100)
 
     def place_mine(self) -> None:
         """
