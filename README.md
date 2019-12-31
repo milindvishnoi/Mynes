@@ -122,7 +122,7 @@ For MynesBoard, I wrote the basic board generator, which initializes the MyneSqu
 MynesLauncher simply runs the game, and has remained unchanged.  I also made some temporary images to prove that the game was partially functional (myne, flag, and empty) which have since been updated.
 
 * Min Hyeok Lee: 
-Through out the project I have Created "open() and flagging()" method in MyneSquare.py. The "open()" method detects the mouse event and changes the state of square by revealing what is inside. The "flagging()" is to place a flag on the square to remind that the square is a mine. Also in MynesBoard.py, I added the number initialization after placing mynes. It iterates through all the squares on the board and counts the number of mynes surrounding that square. Therefore, when the myne game is initiated, board with mynes and numbers are initialized. Lastly, I have created the license.md for our project
+Through out the project I have Created "open() and flagging()" method in MyneSquare.py. The "open()" method detects the mouse event and changes the state of square by revealing what is inside. The "flagging()" is to place a flag on the square to remind that the square is a mine. Also in MynesBoard.py, I added the number initialization after placing mynes. It iterates through all the squares on the board and counts the number of mynes surrounding that square and save as value in the square. Therefore, when the myne game is initiated, board with mynes and numbers are initialized. Lastly, I have created the license.md for our project
 
 
 [Back To The Top](#Mynes)
