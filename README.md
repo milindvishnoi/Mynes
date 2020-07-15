@@ -1,8 +1,6 @@
 # Mynes
 Pod7 coming up with a game Mynes, which inspired by Minesweeper 
 
----
-
 ## Navigation
 - [Description](#description)
 - [Controls](#controls)
@@ -11,13 +9,11 @@ Pod7 coming up with a game Mynes, which inspired by Minesweeper
 - [Extend the Game](#extend-the-game)
 - [Individual Contributions](#individual-contributions)
 - [Licence Information](#licence-information)
----
+
 ## <a name="description"></a>Description
----
 Mynes is a game where you need to use logic to find out all the underlying mines. We remake Minesweeper and create a simpler version for beginners to Minesweeper. In the game window, there exist three different kinds of items: mines, numbers and flag. The rule is similar to minesweeper: you need to reveal all the number squares and flag all the mines. 
 
 ## <a name="controls"></a>Controls
----
 * Left Click --> Reveal squares ![](Icons/1.png) or ![](Icons/mine.png)
 * Right Click --> Flag squares ![](Icons/temp_flag.png)
 * After you flag all the mines, if the game finds that you flag some of the numbers, not mines, lose message will show up. If you left click on mines, lose message will also show up.
@@ -27,7 +23,6 @@ Mynes is a game where you need to use logic to find out all the underlying mines
 
 [Back To The Top](#Mynes)
 ## <a name="how-to-install"></a> How to Install
----
 To install the game you need to type this code into the terminal/cmd.
 
 > pip install https://github.com/milindvishnoi/Pod7.git
@@ -38,7 +33,6 @@ Enjoy our game!
 
 [Back To The Top](#Mynes)
 ## <a name="structure"></a> Project Structure
----
 #### File Structure
 * All code and github related files are stored in the project directory.
 * All unit testing files are located in the "MyneTest" folder.
@@ -74,7 +68,6 @@ This is a breakdown of each file's methods and what they do, in the order that t
 
 [Back To The Top](#Mynes)
 ## <a name="extend-the-game"></a>Extend the Game
----
 All developers are encouraged to not only install and play this game, but to extend it as well. All source code is available for anyone who wishes to make any tweaks. Whether one wishes to make the game harder, make the game easier, or add more attractive animations, we want developers to have the ability to do so. Feel free to read through the project structure above to understand how the game works before adding any tweaks.
 
 
@@ -103,7 +96,6 @@ Here is how one would make the game board larger and add more mines to the game.
 
 [Back To The Top](#Mynes)
 ## <a name="individual-contributions"></a>Individual Contributions
----
 * Milind Vishnoi: 
 I created the win_condition method. The purpose of this method is to close the execution of the application. The win_condition method checks to see if all the squares with the bombs are already flagged or not. Furthermore the  implementation of the multiple_open_square method was also done by me. The multiple_open_square method was implemented to recursively open multiple squares. This is done when the squares value is 0. If the value of the squares is equal to 0 then the recursion continues, if the value fails to equal 0 then it stops. 
 Next off, I also fixed the functionality of other methods. There was no limit to flagging the number of sqaures. I made changes to the implementation of the flagging function, so that the number of flags would be equal to the number of bombs. Additionally a condition which would show all the bombs once the game ends was added aswell. Lastly, I also added a condition that restricted the user to only flag closed squares. 
@@ -127,7 +119,6 @@ Through out the project I have Created "open() and flagging()" method in MyneSqu
 
 [Back To The Top](#Mynes)
 ## <a name="licence-information"></a>Licence Information
----
 The MIT License (MIT)
 
 Copy right © 2019 Pod7
